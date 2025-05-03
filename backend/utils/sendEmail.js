@@ -15,23 +15,24 @@ const transporter = nodemailer.createTransport({
 
 /*------------------Send Mail---------------------*/
 
-const sendEmail = (email,subject,message) => {
-    const mailOptions = {
-      from: process.env.GMAIL_USER,
-      to: email,
-      subject: subject,
-      text: `${message}`,
-      html: `<p>${message}</p>`,
-    };
-   
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error(error);
-      } else {
-        console.log('Email sent: ' + info.response);
-      }
-    });
+const sendEmail = ( email, subject, message ) => {
+  const mailOptions = {
+    from: process.env.GMAIL_USER,
+    to: email,
+    subject: subject,
+    text: message.replace(/<[^>]+>/g, ''), // strip HTML for plain text
+    html: message,
   };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
+};
+
 
 
 export {sendEmail};

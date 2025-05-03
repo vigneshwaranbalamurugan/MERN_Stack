@@ -22,19 +22,18 @@ class otpService {
             try{
                 let user= await Otp.findOne({email});
 
-                if(user && user.otp === otp && !user.isVerified) {
-                    await Otp.updateOne(
+                if(user && user.isVerified === true){
+                    throw new Error('OTP has already been verified.');
+                }else if(user && user.otp === otp)  {
+                    const result = await Otp.updateOne(
                         { email },
                         { $set: { 
                             isVerified: true, 
-                            createdAt: new Date(Date.now() + 1000 * 60 * 30)        
+                            createdAt: new Date(Date.now() + 1000 * 60 * 30),        
                      } }
                     );        
-                    
                     return true;
-                } else if(user.isVerified){
-                    throw new Error('OTP has already been verified.');
-                }else {
+                } else {
                     return false;
                 }
     

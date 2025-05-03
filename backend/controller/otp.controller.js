@@ -6,11 +6,11 @@ export const generateOtp = async (req, res) => {
         const {email}=req.params;
         const otpData=await OtpService.generateOtp(email);
         if(otpData){
-            sendEmail({
-                email:email,
-                subject:"OTP for verification",
-                message:`<p color="green">Your OTP is ${otpData.otp}</p>`
-            });
+            sendEmail(
+                email,
+                "OTP for verification",
+                `<p style="color: green;">Your OTP is ${otpData.otp}</p>`
+            );
             res.status(200).json({
                 success:true,
                 message:"OTP generated successfully",
